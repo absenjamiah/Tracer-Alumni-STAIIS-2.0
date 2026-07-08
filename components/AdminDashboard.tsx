@@ -7,6 +7,7 @@ import {
   ResponsiveContainer, PieChart, Pie, Cell, Tooltip, Legend, BarChart, Bar, XAxis, YAxis, CartesianGrid, RadarChart, PolarGrid, PolarAngleAxis, Radar, Sector, PolarRadiusAxis
 } from 'recharts';
 import { sheetApi } from '../services/sheetApi';
+import { EvaluasiMutuCard } from './EvaluasiMutuCard';
 
 interface AdminDashboardProps {
   alumniList: Alumnus[];
@@ -684,6 +685,10 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({ alumniList, subm
                         <ChartCard title="Kompetensi Utama" data={chartData.kompetensiDibutuhkan} type="pie" />
                         <ChartCard title="Pengalaman Praktik" data={chartData.pengalamanPraktik} type="pie" />
                     </div>
+                </CollapsibleSection>
+
+                <CollapsibleSection title="E. Evaluasi Ketercapaian Standar Mutu">
+                    <EvaluasiMutuCard submissions={submissions} />
                 </CollapsibleSection>
                 {/* Note: Dynamic questions won't have auto-analytics yet, only raw data export */}
             </div>

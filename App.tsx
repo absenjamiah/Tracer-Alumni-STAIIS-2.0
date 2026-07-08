@@ -158,6 +158,31 @@ const App: React.FC = () => {
                // Questions will be empty in fallback initially
             }
 
+            // Check if URL is admin route (direct login-free access for assessors)
+            const isPathAdmin = window.location.pathname.endsWith('/admin') || window.location.pathname === '/admin';
+            const isHashAdmin = window.location.hash === '#admin' || window.location.hash.endsWith('admin');
+            const isQueryAdmin = window.location.search.includes('admin') || window.location.search === '?admin' || window.location.search.includes('view=admin');
+
+            if (isPathAdmin || isHashAdmin || isQueryAdmin) {
+                setLoadingText('Mempersiapkan Dashboard Asesor...');
+                setUserRole('admin');
+                setView('admin_dashboard');
+                
+                // Fetch submissions and set up analytics
+                const result = await sheetApi.getAllSubmissions();
+                if (result.success && result.data) {
+                    const submissionsMap = result.data.reduce((acc: any, submission: any) => {
+                        acc[submission.identitas_nim] = submission;
+                        return acc;
+                    }, {} as { [nim: string]: FormData });
+                    setSubmissions(submissionsMap);
+                    
+                    const subsList = Object.values(submissionsMap) as FormData[];
+                    const analytics = calculateAnalyticsLocal(subsList);
+                    setAnalyticsData(analytics);
+                }
+            }
+
         } catch (error: any) {
             console.error("Error during app initialization:", error);
             setLoginMessage({type: 'error', text: `Gagal memuat aplikasi. Refresh halaman.`});
