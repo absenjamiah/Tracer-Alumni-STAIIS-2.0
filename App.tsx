@@ -65,8 +65,8 @@ function calculateAnalyticsLocal(data: FormData[]) {
 }
 
 const App: React.FC = () => {
-  const [view, setView] = useState<AppView>('login');
-  const [userRole, setUserRole] = useState<'admin' | 'alumni' | null>(null);
+  const [view, setView] = useState<AppView>('admin_dashboard');
+  const [userRole, setUserRole] = useState<'admin' | 'alumni' | null>('admin');
   const [currentUser, setCurrentUser] = useState<Alumnus | null>(null);
   const [alumniData, setAlumniData] = useState<Alumnus[]>([]);
   const [submissions, setSubmissions] = useState<{ [nim: string]: FormData }>({});
@@ -138,12 +138,12 @@ const App: React.FC = () => {
   useEffect(() => {
     const initializeApp = async () => {
         setAppLoading(true);
-        setLoadingText('Menghubungkan ke Database...');
+        setLoadingText('Mempersiapkan Dashboard Admin...');
         try {
-            // 1. Clear sensitive states
-            setUserRole(null);
+            // 1. Set admin states directly
+            setUserRole('admin');
             setCurrentUser(null);
-            setView('login');
+            setView('admin_dashboard');
             
             // 2. Load basic config IN ONE REQUEST
             const response = await sheetApi.getInitialData();
@@ -152,35 +152,22 @@ const App: React.FC = () => {
                setAlumniData(response.data.alumni);
                setCustomQuestions(response.data.questions);
             } else {
-               // Fallback if batch fails or old script version
                console.warn("Batch fetch failed or script outdated, using fallback");
                await fetchAlumniData();
-               // Questions will be empty in fallback initially
             }
 
-            // Check if URL is admin route (direct login-free access for assessors)
-            const isPathAdmin = window.location.pathname.endsWith('/admin') || window.location.pathname === '/admin';
-            const isHashAdmin = window.location.hash === '#admin' || window.location.hash.endsWith('admin');
-            const isQueryAdmin = window.location.search.includes('admin') || window.location.search === '?admin' || window.location.search.includes('view=admin');
-
-            if (isPathAdmin || isHashAdmin || isQueryAdmin) {
-                setLoadingText('Mempersiapkan Dashboard Asesor...');
-                setUserRole('admin');
-                setView('admin_dashboard');
+            // 3. Fetch submissions and set up analytics unconditionally for direct dashboard entry
+            const result = await sheetApi.getAllSubmissions();
+            if (result.success && result.data) {
+                const submissionsMap = result.data.reduce((acc: any, submission: any) => {
+                    acc[submission.identitas_nim] = submission;
+                    return acc;
+                }, {} as { [nim: string]: FormData });
+                setSubmissions(submissionsMap);
                 
-                // Fetch submissions and set up analytics
-                const result = await sheetApi.getAllSubmissions();
-                if (result.success && result.data) {
-                    const submissionsMap = result.data.reduce((acc: any, submission: any) => {
-                        acc[submission.identitas_nim] = submission;
-                        return acc;
-                    }, {} as { [nim: string]: FormData });
-                    setSubmissions(submissionsMap);
-                    
-                    const subsList = Object.values(submissionsMap) as FormData[];
-                    const analytics = calculateAnalyticsLocal(subsList);
-                    setAnalyticsData(analytics);
-                }
+                const subsList = Object.values(submissionsMap) as FormData[];
+                const analytics = calculateAnalyticsLocal(subsList);
+                setAnalyticsData(analytics);
             }
 
         } catch (error: any) {

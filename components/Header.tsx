@@ -51,11 +51,11 @@ export const Header: React.FC<HeaderProps> = ({ userRole, currentUser, onLogout,
         
         {userRole === 'admin' && (
           <button
-            onClick={onLogout}
-            className="group bg-white/50 hover:bg-white border border-slate-200 text-slate-700 font-semibold py-2 px-4 rounded-xl shadow-sm hover:shadow-md transition-all duration-300 flex items-center gap-2 text-sm"
+            onClick={() => window.location.reload()}
+            className="group bg-indigo-50 hover:bg-indigo-100/80 border border-indigo-200 text-indigo-700 font-bold py-2 px-4 rounded-xl shadow-sm hover:shadow-md transition-all duration-300 flex items-center gap-2 text-sm"
           >
-            <span className="hidden sm:inline">Logout</span>
-            <i className="fas fa-sign-out-alt group-hover:text-red-500 transition-colors"></i>
+            <span className="hidden sm:inline">Segarkan Data</span>
+            <i className="fas fa-sync-alt group-hover:rotate-180 transition-transform duration-500 text-indigo-600"></i>
           </button>
         )}
 
