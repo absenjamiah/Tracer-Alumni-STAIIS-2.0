@@ -199,31 +199,18 @@ const App: React.FC = () => {
   const handleLogin = async (role: 'admin' | 'alumni', identity?: string, password?: string) => {
     setLoginMessage(null);
     if (role === 'admin') {
-      if (!identity || !password) {
-        setLoginMessage({type: 'error', text: 'Email and password are required.'});
-        return;
-      }
-      
       setAppLoading(true);
-      setLoadingText('Verifikasi kredensial...');
-
-      const result = await sheetApi.loginAdmin(identity, password);
-
-      if (!result.success) {
-          setAppLoading(false);
-          setLoginMessage({type: 'error', text: result.message || 'Login Failed'});
-      } else {
-          // Login Success
-          setUserRole('admin');
-          try {
-             await initializeAdminData();
-             setView('admin_dashboard');
-          } catch (e) {
-             console.error("Error loading admin data:", e);
-             setLoginMessage({type: 'error', text: "Gagal memuat data dashboard."});
-          } finally {
-             setAppLoading(false);
-          }
+      setLoadingText('Mempersiapkan Dashboard Admin...');
+      
+      setUserRole('admin');
+      try {
+         await initializeAdminData();
+         setView('admin_dashboard');
+      } catch (e) {
+         console.error("Error loading admin data:", e);
+         setLoginMessage({type: 'error', text: "Gagal memuat data dashboard."});
+      } finally {
+         setAppLoading(false);
       }
 
     } else if (role === 'alumni') {

@@ -161,64 +161,27 @@ export const LoginPage: React.FC<LoginPageProps> = ({ onLogin, onForgotPassword,
                             </form>
                         </div>
 
-                        {/* Admin Login Form */}
+                        {/* Admin Direct Entry Form */}
                         <div className={`transition-opacity duration-300 ${activeTab === 'admin' ? 'opacity-100 block' : 'opacity-0 hidden'}`}>
-                            <form className="space-y-5" onSubmit={handleAdminSubmit}>
-                                <div className="text-center mb-4">
-                                     <h3 className="text-lg font-bold text-slate-800">
-                                        Selamat Datang Kembali
+                            <form className="space-y-6" onSubmit={handleAdminSubmit}>
+                                <div className="text-center mb-4 space-y-2">
+                                     <div className="mx-auto w-12 h-12 rounded-full bg-indigo-50 flex items-center justify-center text-indigo-600 mb-3">
+                                         <i className="fas fa-unlock-alt text-lg"></i>
+                                     </div>
+                                     <h3 className="text-lg font-extrabold text-slate-800">
+                                        Akses Dashboard Instan
                                     </h3>
-                                    <p className="text-xs text-slate-500">
-                                        Silakan login untuk mengakses dashboard.
+                                    <p className="text-xs text-slate-500 max-w-sm mx-auto leading-relaxed">
+                                        Fitur login dengan user dan password telah dinonaktifkan. Anda dapat langsung masuk ke dashboard admin/asesor tanpa kredensial.
                                     </p>
                                 </div>
                                
-                                <div className="space-y-4">
-                                    <div className="relative group">
-                                        <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
-                                            <i className="fas fa-envelope text-slate-400 group-focus-within:text-indigo-500 transition-colors"></i>
-                                        </div>
-                                        <input
-                                            id="email-address"
-                                            name="email"
-                                            type="email"
-                                            autoComplete="email"
-                                            required
-                                            className="block w-full pl-11 pr-4 py-3.5 border border-slate-200/60 rounded-xl bg-white/50 backdrop-blur-sm placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent text-sm transition-all"
-                                            placeholder="Alamat Email"
-                                            value={adminEmail}
-                                            onChange={(e) => setAdminEmail(e.target.value)}
-                                        />
-                                    </div>
-                                    <div className="relative group">
-                                         <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
-                                            <i className="fas fa-lock text-slate-400 group-focus-within:text-indigo-500 transition-colors"></i>
-                                        </div>
-                                        <input
-                                            id="password"
-                                            name="password"
-                                            type="password"
-                                            autoComplete="current-password"
-                                            required
-                                            className="block w-full pl-11 pr-4 py-3.5 border border-slate-200/60 rounded-xl bg-white/50 backdrop-blur-sm placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent text-sm transition-all"
-                                            placeholder="Password"
-                                            value={adminPassword}
-                                            onChange={(e) => setAdminPassword(e.target.value)}
-                                        />
-                                    </div>
-                                </div>
-
-                                <div className="flex justify-end">
-                                    <button onClick={(e) => { e.preventDefault(); onForgotPassword(); }} className="text-xs font-semibold text-indigo-600 hover:text-indigo-800 transition-colors">
-                                        Lupa password?
-                                    </button>
-                                </div>
-
                                 <button
                                     type="submit"
-                                    className="w-full flex justify-center py-4 px-4 border border-transparent text-sm font-bold rounded-xl text-white shadow-lg transform transition-all duration-300 hover:-translate-y-1 bg-slate-800 hover:bg-slate-900 shadow-slate-500/30"
+                                    className="w-full flex items-center justify-center gap-2 py-4 px-4 border border-transparent text-sm font-bold rounded-xl text-white shadow-lg shadow-indigo-500/20 hover:shadow-indigo-500/40 hover:-translate-y-1 transform transition-all duration-300 bg-slate-900 hover:bg-indigo-600"
                                 >
-                                    Masuk Dashboard
+                                    <span>Masuk Ke Dashboard Admin</span>
+                                    <i className="fas fa-sign-in-alt"></i>
                                 </button>
                             </form>
                         </div>
